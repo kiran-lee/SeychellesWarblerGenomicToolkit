@@ -1,14 +1,23 @@
-# Seychelles warbler SNPs
+# Seychelles warbler genomic toolkit
 
-Scripts and commands to obtain SNPs from short read 150bp Illumina whole-genome sequencing of ~1900 Seychelles warblers. This includes 1) SNP calling pipeline, 2) Imputation by STITCH and 3) Assessing imputation accuracy.
-
+Scripts and commands to create a genomic toolkit to study Seychelles warblers. 
 Scripts were run on Sheffield University HPCs. These HPCs uses the SLURM queueing system, therefore core/RAM/runtimes in .sh scripts are specified in SLURM format. 
 
-Here is a link to my poster summarising the pipeline: https://docs.google.com/presentation/d/1Np5FN6HVk-SUb764ULfhkUhDWwJStjFU/edit#slide=id.p1
+This includes:
+1) Reference genome
+2) SNPs from short read 150bp Illumina whole-genome sequencing of ~1900 Seychelles warblers that have been imputed for missing genotypes by STITCH.
+3) Sample verification by genomic sex and pedigree assignment
 
-## 1_SNP_calling_pipeline
-`cd 1_SNPs_calling_pipeline`
 
+Here is a link to my poster summarising the toolkit presented at NorthernBug14, Huddersfield: https://docs.google.com/presentation/d/1OCoMiTgyUYtz5R5Uk7KwS7_Gr2fNfv7L/edit?slide=id.p1#slide=id.p1
+
+## 1_Reference_genome
+
+Scripts to create the reference genome, written by Charlotte Bartleet-Cross.
+
+## 2_Imputed_SNPs
+
+### SNP_calling_pipeline
 1. https://docs.google.com/spreadsheets/d/1I1jxm78n4VoYw86xWX-zbb-yERupBtOrV2SymfiHV04/edit#gid=0 : Download links to all sequenced plates.
 
 2. main_submission_multi.sh : An array job that requires sequenced plate number ID as input to quality check (fastqc.sh), trim reads (trimmomatic.sh), align read to the reference genome (bwa.sh), filter mapped reads (clean_bam.sh) , call SNPs (snps.sh) and add read group data to .bam files (picardreadgroup.sh).
@@ -16,18 +25,14 @@ Here is a link to my poster summarising the pipeline: https://docs.google.com/pr
 3. mergefiltervcf.sh : Merge samples from all plates, subset for SNPs for biallelic only and MAF > 0.05.
 
 
-## 2_Imputation_STITCH
+### Imputation_STITCH
 
-### Prepare input files
 1. plinktobedbiallelic.sh: Convert .vcf file to .bed file.
 2. getpos.sh: Get snp position list and split by chromosome for STITCH to use.
 3. picardreadgroup.sh: Add read group data to alligned .bam files and then index output. You must cd into the relevant directory containing aligned .bam files first.
-
-### Perform imputation
 4. multichromosomedownsampledstitchimputationscript.sh: Array job submission to perform imputation, using STITCH for all 31 chromosomes (each of the 31 stitch*.r scripts),  for all 1922 samples (bamlistrg.txt) and their respective names (bamlist.txt).
 
-## 3_Imputation_accuracy
-`cd 3_Imputation_accuracy`
+### Imputation_accuracy
 
 1. obtainsamplecoverage.sh: Get coverage per sample. You must cd into the relevant directory containing aligned .bam files first.
 
@@ -53,3 +58,15 @@ Here is a link to my poster summarising the pipeline: https://docs.google.com/pr
 
 12.   mergereference.sh: Commands to merge  higher coverage repeat samples with the previously sequenced samples, that have been verified as duplicates, for a final round of imputation
 
+## 3_Sample_verification_by_genomic_sex_and_pedigree_assignment
+
+A list of datafiles needed to link verify sequenced samples, by genomic sex assignment and pedigree assignment using sequoia. Also script to for analyses and figures in the manuscript and their outputs.
+
+Useful output files:
+SeychellesWarblerTraitsCorrected.xlsx: All sample-verified sequenced birds in the Seychelles warbler database (BirdID), the plate number they were sequenced on (Plate), sequences sample name as named by Liverpool University (SeqID), sequencing coverage (Coverage), tube number of sample used to link SeqID to BirdID (ID), whether the ID used was BloodID or BloodTubeNumber (Identifier), lifespan (Lifespan), year of birth (BirthYear), year it was last seen (LastSeenYear), lifetime offspring produced (ReproductiveOutput)
+
+PedigreeCorredted.xlsx: A pedigree using sequoia.
+
+relatednesscorrected.grm and relatednesscorrected.grm.id (and relatednesscorrected.log): Genomic relatedness matrix of all samples from imputed SNPs, calculated using PLINK's GCTA tool.
+
+sw_eggnog_gff.tsv: Functional annotation of the reference genome using GALBA.
