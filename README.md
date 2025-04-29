@@ -13,7 +13,10 @@ Here is a link to my poster summarising the toolkit presented at NorthernBug14, 
 
 ## 1_Reference_genome
 
-Scripts to create the reference genome, written by Charlotte Bartleet-Cross.
+Scripts to create the reference genome, mostly written by Charlotte Bartleet-Cross.
+
+Useful output files:
+Chromosome-assembled reference genome: https://zenodo.org/records/14717915/files/ragtag.scaffold.fasta?download=1
 
 ## 2_Imputed_SNPs
 
@@ -57,6 +60,9 @@ Scripts to create the reference genome, written by Charlotte Bartleet-Cross.
 11.  mergereferencepanel.R: This script takes the higher coverage repeat samples and merges them with the previously sequenced samples, that have been verified as duplicates using script as in 10checkaccuracy.sh to output a set of commmands used in 12mergereference.sh
 
 12.   mergereference.sh: Commands to merge  higher coverage repeat samples with the previously sequenced samples, that have been verified as duplicates, for a final round of imputation
+
+Useful output files:
+Imputed whole-genome sequences: https://zenodo.org/records/14717915/files/mergedimputedchromosomeextrasamples.vcf.gz?download=1
 
 ## 3_Sample_verification_by_genomic_sex_and_pedigree_assignment
 
