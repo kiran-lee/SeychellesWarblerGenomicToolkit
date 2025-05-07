@@ -8,7 +8,7 @@ This includes:
 2) SNPs from short read 150bp Illumina whole-genome sequencing of ~1900 Seychelles warblers that have been imputed for missing genotypes by STITCH.
 3) Sample verification by genomic sex and pedigree assignment
 
-\includegraphics[]{Other/20210528-IMG_0515.jpeg}
+\includegraphics[]{[Other/20210528-IMG_0515.jpeg](https://github.com/kiran-lee/SeychellesWarblerGenomicToolkit/blob/main/Other/20210528-IMG_0515.jpeg)}
 
 Poster summarising the toolkit presented at NorthernBug14, Huddersfield: https://docs.google.com/presentation/d/1OCoMiTgyUYtz5R5Uk7KwS7_Gr2fNfv7L/edit?slide=id.p1#slide=id.p1
 
