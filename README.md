@@ -8,27 +8,30 @@ This includes:
 2) SNPs from short read 150bp Illumina whole-genome sequencing of ~1900 Seychelles warblers that have been imputed for missing genotypes by STITCH.
 3) Sample verification by genomic sex and pedigree assignment
 
+\includegraphics[]{Other/20210528-IMG_0515.jpeg}
 
-Here is a link to my poster summarising the toolkit presented at NorthernBug14, Huddersfield: https://docs.google.com/presentation/d/1OCoMiTgyUYtz5R5Uk7KwS7_Gr2fNfv7L/edit?slide=id.p1#slide=id.p1
+Poster summarising the toolkit presented at NorthernBug14, Huddersfield: https://docs.google.com/presentation/d/1OCoMiTgyUYtz5R5Uk7KwS7_Gr2fNfv7L/edit?slide=id.p1#slide=id.p1
 
-## 1_Reference_genome
+
+## 1 Reference genome
 
 Scripts to create the reference genome, mostly written by Charlotte Bartleet-Cross.
 
 Useful output files:
-Chromosome-assembled reference genome: https://zenodo.org/records/14717915/files/ragtag.scaffold.fasta?download=1
+Chromosome-assembled reference genome: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14717915.svg)](https://doi.org/10.5281/zenodo.14717915)
 
-## 2_Imputed_SNPs
+
+## 2 Imputed SNPs
 
 ### SNP_calling_pipeline
-1. https://docs.google.com/spreadsheets/d/1I1jxm78n4VoYw86xWX-zbb-yERupBtOrV2SymfiHV04/edit#gid=0 : Download links to all sequenced plates.
+1. raw.xlsx: Download links to all sequenced plates.
 
 2. main_submission_multi.sh : An array job that requires sequenced plate number ID as input to quality check (fastqc.sh), trim reads (trimmomatic.sh), align read to the reference genome (bwa.sh), filter mapped reads (clean_bam.sh) , call SNPs (snps.sh) and add read group data to .bam files (picardreadgroup.sh).
 
 3. mergefiltervcf.sh : Merge samples from all plates, subset for SNPs for biallelic only and MAF > 0.05.
 
 
-### Imputation_STITCH
+### Imputation STITCH
 
 1. plinktobedbiallelic.sh: Convert .vcf file to .bed file.
 2. getpos.sh: Get snp position list and split by chromosome for STITCH to use.
@@ -62,11 +65,12 @@ Chromosome-assembled reference genome: https://zenodo.org/records/14717915/files
 12.   mergereference.sh: Commands to merge  higher coverage repeat samples with the previously sequenced samples, that have been verified as duplicates, for a final round of imputation
 
 Useful output files:
-Imputed whole-genome sequences: https://zenodo.org/records/14717915/files/mergedimputedchromosomeextrasamples.vcf.gz?download=1
+Imputed whole-genome sequences: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14717915.svg)](https://doi.org/10.5281/zenodo.14717915)
 
-## 3_Sample_verification_by_genomic_sex_and_pedigree_assignment
 
-A list of datafiles needed to link verify sequenced samples, by genomic sex assignment and pedigree assignment using sequoia. Also script to for analyses and figures in the manuscript and their outputs.
+## 3 Sample verification and analysis
+
+Data needed to link verify sequenced samples, by genomic sex assignment and pedigree assignment using sequoia. Also script to for analyses and figures in the manuscript and their outputs.
 
 Useful output files:
 SeychellesWarblerTraitsCorrected.xlsx: All sample-verified sequenced birds in the Seychelles warbler database (BirdID), the plate number they were sequenced on (Plate), sequences sample name as named by Liverpool University (SeqID), sequencing coverage (Coverage), tube number of sample used to link SeqID to BirdID (ID), whether the ID used was BloodID or BloodTubeNumber (Identifier), lifespan (Lifespan), year of birth (BirthYear), year it was last seen (LastSeenYear), lifetime offspring produced (ReproductiveOutput)
