@@ -1494,41 +1494,6 @@ unique_duplicates <- SeychellesWarblerTraitsCorrected$BirdID[duplicated(Seychell
 print(unique_duplicates)
 
 
-# How does the genomic sexing plot look now?
-#Run the sexing model and check any sex mismatches
-#Build model 
-logisticSexModelCorrected <- glm(Sex ~ cbind(Z_cov,(Coverage)) + cbind(nHet,nHom), 
-                     data = subset(SeychellesWarblerTraitsCorrected,SeychellesWarblerTraitsCorrected$ProportionalZCoverage<0.01) , 
-                     family = "binomial")
-#Assign sex based off model
-predicted_probs <- predict(logisticSexModelCorrected, SeychellesWarblerTraitsCorrected, type = "response")
-predicted_sex <- ifelse(predicted_probs > 0.5, "1", "0")
-
-# Add the predicted sex to the data
-SeychellesWarblerTraitsCorrected$PredictedSex <- predicted_sex
-
-# Identify rows where CHD gene sex does not match the predicted sex
-SexMismatchesCorrected <- SeychellesWarblerTraitsCorrected[SeychellesWarblerTraitsCorrected$Sex != SeychellesWarblerTraitsCorrected$PredictedSex, ]
-
-
-# Create the plot with geom_text_repel to prevent label overlap
-ggplot(subset(SeychellesWarblerTraitsCorrected, SeychellesWarblerTraitsCorrected$ProportionalZCoverage<0.01), aes(x = Z_cov/Coverage, y = Het, color = as.factor(Sex))) +
-  geom_point() +  # Scatter plot of the data
-  labs(x = "Z coverage", y = "Het", title = "Proportional Z Chr. Coverage by Z Chr Heterozygosity") +
-  theme_minimal() +  # Minimal theme
-  scale_color_manual(values = c("red", "blue")) +  # Color for sexes
-  geom_text_repel(data = subset(SexMismatchesCorrected,SexMismatchesCorrected$ProportionalZCoverage<0.01) , 
-                  aes(x = ProportionalZCoverage, y = Het, label = BirdID), 
-                  color = "black", 
-                  size = 4,  # Adjust label size
-                  box.padding = 0.5,  # Space between label and point
-                  max.overlaps = 50,  # Limit the number of overlaps (e.g., 50 labels can overlap)
-                  force = 2,  # Set force to avoid excessive movement of labels
-                  max.iter = 1000,  # Limit number of iterations for adjusting the labels
-                  segment.size = 0.5) +  # Adjust the segment size connecting the labels
-  xlim(min(SeychellesWarblerTraitsCorrected$ProportionalZCoverage) - 0, max(SeychellesWarblerTraitsCorrected$ProportionalZCoverage) + 0) +  # Adjust plot limits
-  ylim(min(SeychellesWarblerTraitsCorrected$Het) - 0, max(SeychellesWarblerTraitsCorrected$Het) + 0)  # Adjust plot limits
-
 #The model picks up 1668 (M but geno F) with only one blood sample from 7/24/2002 and conflicts with behavioral method but sequoia mum matches masterbayes mum, so we change sex to F. The bird has no offspring.
 #The model does not pick up 4893 well, but we can see from the plot that it should be change to Male as sequoia mum matches the masterbayes mum. the bird has no offspring.
 LifeHistoryData <- LifeHistoryData %>%
