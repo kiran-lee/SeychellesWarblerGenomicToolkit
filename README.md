@@ -15,7 +15,7 @@ Poster summarising the toolkit presented at NorthernBug14, Huddersfield: https:/
 
 ## 1 Reference genome
 
-Scripts to create the reference genome, mostly written by Charlotte Bartleet-Cross.
+Scripts to create the reference genome.
 
 Useful output files:
 Chromosome-assembled reference genome: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14717915.svg)](https://doi.org/10.5281/zenodo.14717915)
