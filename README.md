@@ -10,6 +10,7 @@ This includes:
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ![A ringed Seychelles warbler](Other/DSC_1573.jpg)
 
 *<small>A ringed Seychelles warbler. Photo: Topher Mahoune, Chief Warden, Cousin Island. Source: Nature Seychelles.</small>*
@@ -18,6 +19,14 @@ This includes:
 >>>>>>> Stashed changes
 =======
 ![Seychelles warbler on Cousin island. © Kiran Gok Lune Lee](Other/20210528-IMG_0515.jpeg)
+>>>>>>> Stashed changes
+=======
+
+![A ringed Seychelles warbler](Other/DSC_1573.jpg)
+
+
+![Seychelles warbler on Cousin island. © Kiran Gok Lune Lee](Other/20210528-IMG_0515.jpeg)
+
 >>>>>>> Stashed changes
 
 Poster summarising the toolkit presented at NorthernBug14, Huddersfield: https://docs.google.com/presentation/d/1OCoMiTgyUYtz5R5Uk7KwS7_Gr2fNfv7L/edit?slide=id.p1#slide=id.p1
