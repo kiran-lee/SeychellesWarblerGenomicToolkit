@@ -9,9 +9,13 @@ This includes:
 3) Sample verification by genomic sex and pedigree assignment
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ![A ringed Seychelles warbler](Other/DSC_1573.jpg)
 
 *<small>A ringed Seychelles warbler. Photo: Topher Mahoune, Chief Warden, Cousin Island. Source: Nature Seychelles.</small>*
+=======
+![Seychelles warbler on Cousin island. © Kiran Gok Lune Lee](Other/20210528-IMG_0515.jpeg)
+>>>>>>> Stashed changes
 =======
 ![Seychelles warbler on Cousin island. © Kiran Gok Lune Lee](Other/20210528-IMG_0515.jpeg)
 >>>>>>> Stashed changes
