@@ -4,18 +4,20 @@ Scripts and commands to create a genomic toolkit to study Seychelles warblers.
 Scripts were run on Sheffield University HPCs. These HPCs uses the SLURM queueing system, therefore core/RAM/runtimes in .sh scripts are specified in SLURM format. 
 
 This includes:
-1) Reference genome
+1) Genome assembly
 2) SNPs from short read 150bp Illumina whole-genome sequencing of ~1900 Seychelles warblers that have been imputed for missing genotypes by STITCH.
 3) Sample verification by genomic sex and pedigree assignment
 
-![A ringed Seychelles warbler](Other/20210528-IMG_0515.jpeg)
+![A ringed Seychelles warbler](Other/DSC_1573.jpg)
+
+*<small>A ringed Seychelles warbler. Photo: Topher Mahoune, Chief Warden, Cousin Island. Source: Nature Seychelles.</small>*
 
 Poster summarising the toolkit presented at NorthernBug14, Huddersfield: https://docs.google.com/presentation/d/1OCoMiTgyUYtz5R5Uk7KwS7_Gr2fNfv7L/edit?slide=id.p1#slide=id.p1
 
 
-## 1 Reference genome
+## 1 Genome assembly
 
-Scripts to create the reference genome.
+Scripts for genome assembly.
 
 Useful output files:
 Chromosome-assembled reference genome: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14717915.svg)](https://doi.org/10.5281/zenodo.14717915)
