@@ -14,7 +14,6 @@ This includes:
 
 ![Seychelles warbler on Cousin island. © Kiran Gok Lune Lee](Other/20210528-IMG_0515.jpeg)
 
-
 Poster summarising the toolkit presented at NorthernBug14, Huddersfield: https://docs.google.com/presentation/d/1OCoMiTgyUYtz5R5Uk7KwS7_Gr2fNfv7L/edit?slide=id.p1#slide=id.p1
 
 
