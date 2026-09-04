@@ -77,7 +77,7 @@ Imputed whole-genome sequences: [![DOI](https://zenodo.org/badge/DOI/10.5281/zen
 Data needed to link verify sequenced samples, by genomic sex assignment and pedigree assignment using sequoia. Also script to for analyses and figures in the manuscript and their outputs.
 
 Useful output files:
-SeychellesWarblerTraitsCorrected.xlsx: All sample-verified sequenced birds in the Seychelles warbler database (BirdID), the plate number they were sequenced on (Plate), sequences sample name as named by Liverpool University (SeqID), sequencing coverage (Coverage), tube number of sample used to link SeqID to BirdID (ID), whether the ID used was BloodID or BloodTubeNumber (Identifier), lifespan (Lifespan), year of birth (BirthYear), year it was last seen (LastSeenYear), lifetime offspring produced (ReproductiveOutput)
+SeychellesWarblerTraitsCorrected.xlsx: All sample-verified sequenced sample names as named by Liverpool University (SeqID), the plate number they were sequenced on (Plate), , sequencing coverage (Coverage), tube number of sample used to link SeqID to BirdID (ID), whether the ID used was BloodID or BloodTubeNumber (Identifier), lifespan (Lifespan), year of birth (BirthYear), year it was last seen (LastSeenYear), lifetime offspring produced (ReproductiveOutput)
 
 PedigreeCorredted.xlsx: A pedigree using sequoia.
 

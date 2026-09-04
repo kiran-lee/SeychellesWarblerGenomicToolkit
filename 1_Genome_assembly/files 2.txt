@@ -1,0 +1,14 @@
+/shared/molecol2/SeychellesWarblerGenome/scripts/arrow.sh
+/shared/molecol2/SeychellesWarblerGenome/scripts/arrow2.sh
+/shared/molecol2/SeychellesWarblerGenome/scripts/pbalignsave.sh
+/shared/molecol2/SeychellesWarblerGenome/homescripts/bwapooltofalc.sh
+/shared/molecol2/SeychellesWarblerGenome/homescripts/longrangerbasic.sh
+/shared/molecol2/SeychellesWarblerGenome/Final_Genome_All/ARCS/arcsmake0204/arcsSCAFF-2.sh
+/shared/molecol2/SeychellesWarblerGenome/Final_Genome_All/ARCS/arcsmake2304/arcsSCAFF-5.sh
+/shared/molecol2/SeychellesWarblerGenome/Final_Genome_All/ARCS/arcsmake3103/arcsmake.sh
+/shared/molecol2/SeychellesWarblerGenome/Final_Genome_All/ARCS/arcsmake3103/arcsmake2.sh
+/shared/molecol2/SeychellesWarblerGenome/Final_Genome_All/ARCS/arcsmake2104/arcsSCAFF-4.sh
+/shared/molecol2/SeychellesWarblerGenome/Final_Genome_All/ARCS/arcsmake0604/arcsSCAFF-3.sh
+/shared/molecol2/SeychellesWarblerGenome/homescripts/busco.sh
+/shared/molecol2/SeychellesWarblerGenome/homescripts/buscoplot.sh
+/shared/molecol2/SeychellesWarblerGenome/homescripts/assemblystatsperl.sh

@@ -50,6 +50,7 @@ library(genio)
 
 
 ```
+
 ## Ch.1 Map of Seychelles
 
 Create a map for future figures.
@@ -252,6 +253,7 @@ print(gg_final)
 
 #ggsave("seychelles_map_recreation_final.png", plot = gg_final, width = 8, height = 7, dpi = 300)
 ```
+
 ## Ch.1 SeqIDs (1st round of imputation)
 
 Load SeqIDs of sequenced samples after first round of imputation by STITCH.
@@ -777,10 +779,10 @@ SummarySeq(SeqList = sw_family_sequoia_justparents)
 
 ```
 
-
 ## Ch.1 Sample mismatches
 
 Investigating mismatches between field database and genotype data.
+
 ```{r sample_mismatch, eval=TRUE, echo=TRUE, include=TRUE}
 library(dplyr)
 # First let's deal with sex mismatches. Recall the mismatches outputted from the model
@@ -1858,6 +1860,7 @@ openxlsx::write.xlsx(SeychellesWarblerTraitsCorrected, file ="SeychellesWarblerT
 openxlsx::write.xlsx(SequoiaPedigree, file ="SequoiaMasterbayesPedigree.xlsx", quote=FALSE)
 
 ```
+
 ## Ch.1 Relatedness comparison
 
 Visualising performance of masterbayes and sequoia using pairwise relatedness
@@ -1921,23 +1924,33 @@ hexbin::hexbinplot(Rel.both.new$R.ped ~ Rel.both.new$R.GRM,  # Swap x and y
 
 #png("relatedness_hexbin_plot_sequoia.png", width = 1200, height = 1000, res = 150) #for saving only 
 
-hb <- hexbin::hexbin(Rel.both.new$R.ped ~ Rel.both.new$R.GRM,
-                     xbins=100, xbnds=c(-.7, 1.2), ybnds=c(-.05, 1),
-                     xlab="Genomic relatedness", ylab="Sequoia pedigree relatedness")
-hbp <- hexbin::plot(hb,
-                                  trans=log10, inv=function(x) 10^x,
-                                  colorcut=seq(0,1,length=14), maxcnt=10^6.5,
-                                  colramp = function(n) {grDevices::hcl.colors(n, palette='Berlin')}
-                                  ) 
-hexbin::hexVP.abline(hbp$plot.vp, lm(Rel.both.new$R.GRM ~ Rel.both.new$R.ped))
+hb <- hexbin::hexbin(
+  Rel.both.ped$R.ped.y ~ Rel.both.ped$R.ped.x, 
+  xbins = 100, 
+  xbnds = c(-0.05, 1), 
+  ybnds = c(-0.05, 1),
+  xlab = "Sequoia pedigree relatedness", 
+  ylab = "Microsatellites pedigree relatedness"
+)
+
+hbp <- hexbin::plot(
+  hb,
+  trans = log10, 
+  inv = function(x) 10^x,
+  colramp = function(n) { grDevices::hcl.colors(n, palette = "Berlin") }
+) 
+
+hexbin::hexVP.abline(hbp$plot.vp, a = 0, b = 1, col = "black", lty = 1, lwd = 1.5)
 
 #dev.off() #for saving only
 
 
 ```
+
 ## Ch.1 Mix-up flow diagram
 
 Flow diagram to illustrate mix ups.
+
 ```{r flow_diagram, eval = TRUE, echo = TRUE, tidy=FALSE}
 library(DiagrammeR)
 library(DiagrammeRsvg)
@@ -2091,4 +2104,268 @@ print(number_of_genes_per_chrom)
 seygenes <- seyall %>% filter(feature %in% "mRNA") %>% arrange(start,end) %>% mutate(mid = start + (end-start)/2) 
 rm(swgff)
 ```
+## Ch. 1 Reviewer comments
 
+Plots and calculations made in response to peer review.
+
+```{r reviewer, eval=TRUE, warning=FALSE, include=TRUE }
+SeychellesWarblerTraitsCorrected <- readxl::read_excel("/Users/kiranlee/Documents/GitHub/InProgressGenomicsInbreedingSeychellesWarblers/Data/SeychellesWarblerTraitsCorrected.xlsx")
+
+
+library(ggplot2)
+
+# Create a clean logical indicator column for LIMSMERGED
+SeychellesWarblerTraitsCorrected$Is_Reference <- SeychellesWarblerTraitsCorrected$Plate == "LIMSMERGED"
+
+library(ggplot2)
+
+ggplot(SeychellesWarblerTraitsCorrected, aes(x = Coverage, fill = Plate == "LIMSMERGED")) +
+  geom_histogram(binwidth = 0.05, color = NA, alpha = 0.9, position = "identity") +
+  scale_fill_manual(
+    values = c("FALSE" = "grey70", "TRUE" = "black"),
+    labels = c("FALSE" = "lcWGS samples", "TRUE" = "Reference set"),
+    name = NULL
+  ) +
+  theme_classic()+
+  theme(
+    text = element_text(size = 20),            # Default text size
+    axis.title.x = element_text(size = 20, margin = margin(t = 15)),
+    axis.title.y = element_text(size = 20, margin = margin(r = 15)),
+    axis.text = element_text(size = 16),        # Axis tick labels
+    plot.title = element_text(size = 32, face = "bold"),  # Title
+    legend.text = element_text(size = 16),      # Legend text
+    legend.title = element_text(size = 20),
+    legend.position = "bottom",
+    panel.background = element_blank(),        # Remove background color
+    plot.background = element_blank())+
+  labs(
+    x = "Mean sequencing coverage per sample (x)",
+    y = "Number of samples"
+  )
+
+ref_panel_concordance<- read.delim("pooled_sample_concordance.txt")
+ref_panel_concordance<- subset(ref_panel_concordance, ref_panel_concordance$Concordance>0.94)
+# Calculate summary statistics across the 56 reference samples
+stats <- ref_panel_concordance %>%
+  summarise(
+    n_samples        = n(),
+    mean_concordance = mean(Concordance),
+    sd_concordance   = sd(Concordance),
+    median_conc      = median(Concordance),
+    min_concordance  = min(Concordance),
+    max_concordance  = max(Concordance),
+    iqr_concordance  = IQR(Concordance)
+  )
+
+print(stats)
+
+library(tidyverse)
+
+# 1. Clean the Sample column in df to match the Filepath column structure
+# This strips the '.0.1x.bam' suffix and extracts just the base filename if needed
+df_clean <- ref_panel_concordance %>%
+  mutate(
+    # Remove the suffix '.0.1x.bam'
+    clean_file = gsub("\\.0\\.1x\\.bam$", "", Sample),
+    # Extract just the filename if Sample contains full path directories
+    clean_file = basename(clean_file)
+  )
+
+# 2. Clean Filepath in traits dataset for exact key matching
+traits_clean <- SeychellesWarblerTraitsCorrected %>%
+  mutate(
+    clean_file = basename(Filepath)
+  )
+
+# 3. Merge concordance stats with sample metadata
+df_merged <- inner_join(df_clean, traits_clean, by = "clean_file")
+
+# Quick check on how many samples matched (should be 57)
+cat("Successfully matched", nrow(df_merged), "out of", nrow(df), "validation samples.\n\n")
+
+# 4. Perform Pearson and Spearman correlation analysis
+# (Update 'Coverage' if your depth column has a slightly different header name, e.g., 'Mean_Coverage' or 'Depth')
+pearson_test  <- cor.test(df_merged$Coverage, df_merged$Concordance, method = "pearson")
+spearman_test <- cor.test(df_merged$Coverage, df_merged$Concordance, method = "spearman")
+
+# Print summary results
+cat("=== Pearson Correlation ===\n")
+print(pearson_test)
+
+cat("\n=== Spearman Rank Correlation ===\n")
+print(spearman_test)
+
+# 5. Scatterplot with linear trend line
+ggplot(df_merged, aes(x = Coverage, y = Concordance)) +
+  geom_point(size = 3, alpha = 0.85, color = "black") +
+  geom_smooth(method = "lm", color = "black", se = TRUE, fill = "gray80") +
+  theme_classic()+
+  theme(
+    text = element_text(size = 20),            # Default text size
+    axis.title.x = element_text(size = 20, margin = margin(t = 15)),
+    axis.title.y = element_text(size = 20, margin = margin(r = 15)),
+    axis.text = element_text(size = 16),        # Axis tick labels
+    plot.title = element_text(size = 32, face = "bold"),  # Title
+    legend.text = element_text(size = 16),      # Legend text
+    legend.title = element_text(size = 20),
+    legend.position = "bottom",
+    panel.background = element_blank(),        # Remove background color
+    plot.background = element_blank())+  labs(
+    x = "Read depth of reference set individual (x)",
+    y = "Genotype concordance"
+    )
+  )
+
+# 1. Load the extracted STITCH INFO scores
+info_df <- read.delim(
+  "vcf_info_scores.txt", 
+  header = FALSE, 
+  col.names = c("CHROM", "POS", "REF", "ALT", "INFO_SCORE")
+)
+
+# 2. Calculate distribution summary statistics
+info_summary <- info_df %>%
+  summarise(
+    total_snps     = n(),
+    mean_info      = mean(INFO_SCORE, na.rm = TRUE),
+    median_info    = median(INFO_SCORE, na.rm = TRUE),
+    snps_ge_0.4    = sum(INFO_SCORE >= 0.4, na.rm = TRUE),
+    prop_ge_0.4    = mean(INFO_SCORE >= 0.4, na.rm = TRUE) * 100,
+    snps_ge_0.6    = sum(INFO_SCORE >= 0.6, na.rm = TRUE),
+    prop_ge_0.6    = mean(INFO_SCORE >= 0.6, na.rm = TRUE) * 100,
+    snps_ge_0.8    = sum(INFO_SCORE >= 0.8, na.rm = TRUE),
+    prop_ge_0.8    = mean(INFO_SCORE >= 0.8, na.rm = TRUE) * 100
+  )
+
+print(info_summary)
+
+# 3. Plot publication-ready histogram of post-imputation INFO scores
+ggplot(info_df, aes(x = INFO_SCORE)) +
+  geom_histogram(binwidth = 0.02, fill = "black", color = NA, alpha = 0.85) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_classic()+
+  theme(
+    text = element_text(size = 20),            # Default text size
+    axis.title.x = element_text(size = 20, margin = margin(t = 15)),
+    axis.title.y = element_text(size = 20, margin = margin(r = 15)),
+    axis.text = element_text(size = 16),        # Axis tick labels
+    axis.line = element_line(color = "black"),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  ) +
+  labs(
+    x = "STITCH SNP INFO Score",
+    y = "Number of SNPs"
+  )
+
+df <- fread("vcf_info_scores_eaf.txt", select = c(5, 6), col.names = c("EAF", "INFO_SCORE"))
+df[, EAF := as.numeric(as.character(EAF))]
+df[, INFO_SCORE := as.numeric(as.character(INFO_SCORE))]
+df <- na.omit(df)
+df[, MAF := pmin(EAF, 1 - EAF)]
+df[, MAF_bin := cut(MAF, 
+                    breaks = c(0, 0.005, 0.01, 0.02, 0.05, 0.10, 0.20, 0.50), 
+                    include.lowest = TRUE, 
+                    labels = c("<0.005", "0.005-0.01", "0.01-0.02", "0.02-0.05", "0.05-0.10", "0.10-0.20", "0.20-0.50"))]
+bin_summary <- df[!is.na(MAF_bin), .(
+  SNP_Count   = .N,
+  Mean_INFO   = mean(INFO_SCORE, na.rm = TRUE),
+  Median_INFO = median(INFO_SCORE, na.rm = TRUE),
+  Prop_GE_0.4 = mean(INFO_SCORE >= 0.4, na.rm = TRUE) * 100
+), by = MAF_bin][order(MAF_bin)]
+
+print(bin_summary)
+
+# 1. Reformat summary data
+bin_summary$MAF_bin <- factor(
+  bin_summary$MAF_bin, 
+  levels = c("<0.005", "0.005-0.01", "0.01-0.02", "0.02-0.05", "0.05-0.10", "0.10-0.20", "0.20-0.50")
+)
+
+# Panel A: Mean INFO Score
+p1 <- ggplot(bin_summary, aes(x = MAF_bin, y = Mean_INFO, group = 1)) +
+  geom_line(color = "black", linewidth = 1) +
+  geom_point(color = "black", size = 3) +
+  scale_y_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.2)) +
+  theme_classic()+
+  theme(
+    text = element_text(size = 20),            # Default text size
+    axis.title.x = element_text(size = 20, margin = margin(t = 15)),
+    axis.title.y = element_text(size = 20, margin = margin(r = 15)),
+    axis.text = element_text(size = 16),        # Axis tick labels
+    axis.line = element_line(color = "black"),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  ) +
+  labs(x = "Minor Allele Frequency (MAF)", y = "Mean STITCH INFO Score")
+
+p1
+
+#GRM against coverage
+Rel.snp <- Rel.snp %>%
+  mutate(
+    IID1 = as.character(IID1),
+    IID2 = as.character(IID2)
+  )
+
+# 2. Calculate mean off-diagonal GRM relatedness per individual
+indv_rel <- bind_rows(
+  Rel.snp %>% select(BirdID = IID1, R.GRM),
+  Rel.snp %>% select(BirdID = IID2, R.GRM)
+) %>%
+  group_by(BirdID) %>%
+  summarise(
+    mean_R_GRM = mean(R.GRM, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# 3. Join with metadata and FILTER for Coverage > 0.05
+indv_qc <- indv_rel %>%
+  inner_join(
+    SequencedIndividualsBirdIDs %>% 
+      filter(Coverage > 0.05) %>%  # <--- FILTER APPLIED HERE
+      mutate(BirdID = as.character(BirdID)) %>%
+      select(BirdID, Coverage), 
+    by = "BirdID"
+  )
+
+# 4. Fit linear regression model
+fit <- lm(mean_R_GRM ~ Coverage, data = indv_qc)
+fit_sum <- summary(fit)
+r2_val <- fit_sum$r.squared
+p_val  <- fit_sum$coefficients[2, 4]
+
+# Print stats to console
+cat(sprintf("\n--- Diagnostic Regression Results (Coverage > 0.01) ---\n"))
+cat(sprintf("N individuals: %d\n", nrow(indv_qc)))
+cat(sprintf("R-squared: %.5f\n", r2_val))
+cat(sprintf("p-value: %.5e\n\n", p_val))
+
+# 5. Generate Diagnostic Plot (Figure SXX)
+p <- ggplot(indv_qc, aes(x = Coverage, y = mean_R_GRM)) +
+  geom_point(alpha = 0.5, color = "grey", size = 1.8) +
+  geom_smooth(method = "lm", color = "black", se = FALSE, linetype = "dashed", linewidth = 0.8) +
+  theme_classic()+
+  theme(
+    text = element_text(size = 20),            # Default text size
+    axis.title.x = element_text(size = 20, margin = margin(t = 15)),
+    axis.title.y = element_text(size = 20, margin = margin(r = 15)),
+    axis.text = element_text(size = 16),        # Axis tick labels
+    axis.line = element_line(color = "black"),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  ) +
+  labs(
+    x = "Mean Sequencing Depth (Coverage > 0.01×)",
+    y = "Mean Pairwise Genomic Relatedness",
+    subtitle = sprintf("Linear regression: R² = %.4f, p = %.4f", 
+                       r2_val, p_val, nrow(indv_qc))
+  ) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+# Display plot and save high-res figure
+print(p)
+```
